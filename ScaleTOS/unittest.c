@@ -30,10 +30,10 @@ void _task_test_func3(void);
 void _task_test_post_func(void);
 
 void (*testList[])(void) = {
-	//test_tick,
-	//test_timer,
-	test_mem_manager,
-	//test_create_task
+	test_tick,
+	test_timer,
+	//test_mem_manager,
+	test_create_task
 };
 
 void test_init(void);

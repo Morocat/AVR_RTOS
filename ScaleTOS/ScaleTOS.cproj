@@ -96,44 +96,44 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGcc>
-        <avrgcc.common.Device>-mmcu=atxmega192d3 -B "%24(PackRepoDir)\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3"</avrgcc.common.Device>
-        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
-        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-        <avrgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </avrgcc.compiler.symbols.DefSymbols>
-        <avrgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\XMEGAD_DFP\1.0.32\include</Value>
-            <Value>../avrxmega</Value>
-            <Value>..</Value>
-            <Value>../scalecore3</Value>
-          </ListValues>
-        </avrgcc.compiler.directories.IncludePaths>
-        <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
-        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
-        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-        <avrgcc.linker.libraries.Libraries>
-          <ListValues>
-            <Value>libm</Value>
-          </ListValues>
-        </avrgcc.linker.libraries.Libraries>
-        <avrgcc.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\XMEGAD_DFP\1.0.32\include</Value>
-          </ListValues>
-        </avrgcc.assembler.general.IncludePaths>
-        <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
-      </AvrGcc>
+  <avrgcc.common.Device>-mmcu=atxmega192d3 -B "%24(PackRepoDir)\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3"</avrgcc.common.Device>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\XMEGAD_DFP\1.0.32\include</Value>
+      <Value>../avrxmega</Value>
+      <Value>..</Value>
+      <Value>../board</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcc.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </avrgcc.linker.libraries.Libraries>
+  <avrgcc.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\XMEGAD_DFP\1.0.32\include</Value>
+    </ListValues>
+  </avrgcc.assembler.general.IncludePaths>
+  <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
+</AvrGcc>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
@@ -170,34 +170,34 @@
     <Compile Include="queue.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\bios.c">
+    <Compile Include="board\bios.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\bios.h">
+    <Compile Include="board\bios.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\clksys_driver.c">
+    <Compile Include="board\clksys_driver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\clksys_driver.h">
+    <Compile Include="board\clksys_driver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\port_driver.c">
+    <Compile Include="board\port_driver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\port_driver.h">
+    <Compile Include="board\port_driver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\serial.c">
+    <Compile Include="board\serial.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\serial.h">
+    <Compile Include="board\serial.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\usart_driver.c">
+    <Compile Include="board\usart_driver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="scalecore3\usart_driver.h">
+    <Compile Include="board\usart_driver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
@@ -221,7 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="avrxmega" />
-    <Folder Include="scalecore3" />
+    <Folder Include="board" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

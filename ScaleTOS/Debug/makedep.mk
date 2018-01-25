@@ -12,15 +12,15 @@ kernel.c
 
 queue.c
 
-scalecore3\bios.c
+board\bios.c
 
-scalecore3\clksys_driver.c
+board\clksys_driver.c
 
-scalecore3\port_driver.c
+board\port_driver.c
 
-scalecore3\serial.c
+board\serial.c
 
-scalecore3\usart_driver.c
+board\usart_driver.c
 
 main.c
 

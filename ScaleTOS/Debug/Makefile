@@ -34,7 +34,7 @@ LINKER_SCRIPT_DEP:=
 # Every subdirectory with source files must be described here
 SUBDIRS :=  \
 ../avrxmega \
-../scalecore3
+../board
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
@@ -44,11 +44,11 @@ C_SRCS +=  \
 ../common.c \
 ../kernel.c \
 ../queue.c \
-../scalecore3/bios.c \
-../scalecore3/clksys_driver.c \
-../scalecore3/port_driver.c \
-../scalecore3/serial.c \
-../scalecore3/usart_driver.c \
+../board/bios.c \
+../board/clksys_driver.c \
+../board/port_driver.c \
+../board/serial.c \
+../board/usart_driver.c \
 ../main.c \
 ../timer.c \
 ../unittest.c
@@ -66,11 +66,11 @@ avrxmega/tick.o \
 common.o \
 kernel.o \
 queue.o \
-scalecore3/bios.o \
-scalecore3/clksys_driver.o \
-scalecore3/port_driver.o \
-scalecore3/serial.o \
-scalecore3/usart_driver.o \
+board/bios.o \
+board/clksys_driver.o \
+board/port_driver.o \
+board/serial.o \
+board/usart_driver.o \
 main.o \
 timer.o \
 unittest.o
@@ -81,11 +81,11 @@ avrxmega/tick.o \
 common.o \
 kernel.o \
 queue.o \
-scalecore3/bios.o \
-scalecore3/clksys_driver.o \
-scalecore3/port_driver.o \
-scalecore3/serial.o \
-scalecore3/usart_driver.o \
+board/bios.o \
+board/clksys_driver.o \
+board/port_driver.o \
+board/serial.o \
+board/usart_driver.o \
 main.o \
 timer.o \
 unittest.o
@@ -96,11 +96,11 @@ avrxmega/tick.d \
 common.d \
 kernel.d \
 queue.d \
-scalecore3/bios.d \
-scalecore3/clksys_driver.d \
-scalecore3/port_driver.d \
-scalecore3/serial.d \
-scalecore3/usart_driver.d \
+board/bios.d \
+board/clksys_driver.d \
+board/port_driver.d \
+board/serial.d \
+board/usart_driver.d \
 main.d \
 timer.d \
 unittest.d
@@ -111,11 +111,11 @@ avrxmega/tick.d \
 common.d \
 kernel.d \
 queue.d \
-scalecore3/bios.d \
-scalecore3/clksys_driver.d \
-scalecore3/port_driver.d \
-scalecore3/serial.d \
-scalecore3/usart_driver.d \
+board/bios.d \
+board/clksys_driver.d \
+board/port_driver.d \
+board/serial.d \
+board/usart_driver.d \
 main.d \
 timer.d \
 unittest.d
@@ -164,21 +164,21 @@ LINKER_SCRIPT_DEP+=
 avrxmega/%.o: ../avrxmega/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\include" -I"../avrxmega" -I".." -I"../scalecore3"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega192d3 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\include" -I"../avrxmega" -I".." -I"../board"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega192d3 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
 ./%.o: .././%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\include" -I"../avrxmega" -I".." -I"../scalecore3"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega192d3 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\include" -I"../avrxmega" -I".." -I"../board"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega192d3 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-scalecore3/%.o: ../scalecore3/%.c
+board/%.o: ../board/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\include" -I"../avrxmega" -I".." -I"../scalecore3"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega192d3 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\include" -I"../avrxmega" -I".." -I"../board"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega192d3 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.0.32\gcc\dev\atxmega192d3" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 

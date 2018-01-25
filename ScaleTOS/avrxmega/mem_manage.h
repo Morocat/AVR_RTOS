@@ -21,11 +21,8 @@
 //#define CRITICAL_SYNC_START()
 //#define CRITICAL_SYNC_END()
 
-#if DEBUG_TRACE
-#define MEMORY_SIZE 32
-#else
-#define MEMORY_SIZE 2048
-#endif
+#define MEMORY_SIZE 4096
+//#define MEMORY_SIZE 32
 
 #define m_malloc(_size) internal_malloc(_size)
 #define m_free(_ptr) internal_free(_ptr)
