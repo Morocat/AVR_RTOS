@@ -17,6 +17,7 @@
 
 volatile uint8_t memory[MEMORY_SIZE];
 uint16_t totalAllocatedMemory;
+uint16_t totalNumBlocks;
 
 void combine_unused_blocks(uint16_t index);
 
@@ -60,6 +61,7 @@ mem_loc* internal_malloc(uint16_t size) {
 	intSize |= IN_USE_bm;
 	memcpy(&memory[index], &intSize, HEADER_SIZE);
 	totalAllocatedMemory += size + HEADER_SIZE;
+	totalNumBlocks++;
 
 	CRITICAL_SYNC_END();
 	return &memory[index + HEADER_SIZE];
@@ -241,6 +243,7 @@ void internal_free(mem_loc *ptr) {
 	blk &= ~IN_USE_bm;
 	memcpy(addr, &blk, HEADER_SIZE);
 	totalAllocatedMemory -= blk;
+	totalNumBlocks--;
 	CRITICAL_SYNC_END();
 }
 
@@ -275,6 +278,7 @@ void mem_manager_test(void) {
 	m_assert(actual == 0xaaaaaaaa);
 	m_assert(header == (6 | IN_USE_bm));
 	m_assert(totalAllocatedMemory == 6);
+	m_assert(totalNumBlocks == 1);
 	// memory: 06 80 aa aa   aa aa
 
 	data2 = m_malloc(4);
@@ -283,12 +287,14 @@ void mem_manager_test(void) {
 	memcpy(&actual, &memory[8], 4);
 	m_assert(actual == 0xbbbbbbbb);
 	m_assert(totalAllocatedMemory == 12);
+	m_assert(totalNumBlocks == 2);
 	// memory: 06 80 aa aa   aa aa 06 80   bb bb bb bb
 
 	m_free(data1);
 	memcpy(&header, memory, HEADER_SIZE);
 	m_assert(header == 6);
 	m_assert(totalAllocatedMemory == 6);
+	m_assert(totalNumBlocks == 1);
 	// memory: 06 00 aa aa   aa aa 06 80   bb bb bb bb
 
 	data1 = m_malloc(6);
@@ -298,6 +304,7 @@ void mem_manager_test(void) {
 	memcpy(&header, &memory[12], HEADER_SIZE);
 	m_assert(header == ((6 + HEADER_SIZE) | IN_USE_bm));
 	m_assert(totalAllocatedMemory == 14);
+	m_assert(totalNumBlocks == 2);
 	// memory: 06 00 aa aa   aa aa 06 80   bb bb bb bb   08 80 cc cc   cc cc cc cc
 
 	data3 = m_malloc(8);
@@ -305,6 +312,7 @@ void mem_manager_test(void) {
 	for (i = 0; i < 8; i++)
 		m_assert(memory[i + 20 + HEADER_SIZE] == 0xdd);
 	m_assert(totalAllocatedMemory == 24);
+	m_assert(totalNumBlocks == 3);
 	// memory: 06 00 aa aa   aa aa 06 80   bb bb bb bb   08 80 cc cc   cc cc cc cc    0a 80 dd dd   dd dd dd dd   dd dd 00 00
 
 	// extend block at end of list with space remaining
@@ -315,6 +323,7 @@ void mem_manager_test(void) {
 	for (i = 0; i < 10; i++)
 		m_assert(memory[i + 20 + HEADER_SIZE] == 0xdd);
 	m_assert(totalAllocatedMemory == 26);
+	m_assert(totalNumBlocks == 3);
 	// memory: 06 00 aa aa   aa aa 06 80   bb bb bb bb   08 80 cc cc   cc cc cc cc    0c 80 dd dd   dd dd dd dd   dd dd dd dd
 
 	// extend block at end of list with no space remaining
@@ -323,6 +332,7 @@ void mem_manager_test(void) {
 	memcpy(&header, &memory[20], HEADER_SIZE);
 	m_assert(header == (0x000c | IN_USE_bm));
 	m_assert(totalAllocatedMemory == 26);
+	m_assert(totalNumBlocks == 3);
 	// memory: 06 00 aa aa   aa aa 06 80   bb bb bb bb   08 80 cc cc   cc cc cc cc    0c 80 dd dd   dd dd dd dd   dd dd dd dd
 }
 
@@ -348,36 +358,45 @@ uint8_t mem5[] = { 0x02, 0x80, 0x15, 0, 0, 0, 0, 0,
 
 void mem_manager_test2(void) {
 	mem_loc data1;
+
 	// extend block and cause it to move locations
 	totalAllocatedMemory = 9;
+	totalNumBlocks = 3;
 	memcpy(memory, mem2, MEMORY_SIZE);
 	data1 = m_realloc(memory + 0x1a + HEADER_SIZE, 11);
 	m_assert(data1 != NULL);
 	m_assert(memcmp(mem3, memory, MEMORY_SIZE) == 0);
 	m_assert(totalAllocatedMemory == 18);
+	m_assert(totalNumBlocks == 3);
 
 	totalAllocatedMemory = 7;
 	memcpy(memory, mem2, MEMORY_SIZE);
+	totalNumBlocks = 3;
 	memory[31] = 0;
 	mem3[31] = 0;
 	data1 = m_realloc(memory + 0x1a + HEADER_SIZE, 11);
 	m_assert(data1 != NULL);
 	m_assert(memcmp(mem3, memory, MEMORY_SIZE) == 0);
 	m_assert(totalAllocatedMemory == 16);
+	m_assert(totalNumBlocks == 3);
 
 	// extend block and claim extra space since there's no room for a header
 	mem3[31] = 0x80;
 	memcpy(memory, mem3, MEMORY_SIZE);
+	totalNumBlocks = 3;
 	totalAllocatedMemory = 0x12;
 	data1 = m_realloc(memory + HEADER_SIZE, 20);
 	m_assert(totalAllocatedMemory == 0x1c);
+	m_assert(totalNumBlocks == 3);
 
 	// standard realloc to make it smaller and require a dummy header to be created
 	memcpy(memory, mem3, MEMORY_SIZE);
+	totalNumBlocks = 3;
 	totalAllocatedMemory = 0x12;
 	data1 = m_realloc(memory + HEADER_SIZE, 0x06);
 	m_assert(memcmp(mem4, memory, MEMORY_SIZE) == 0);
 	m_assert(totalAllocatedMemory == 0x0d);
+	m_assert(totalNumBlocks == 3);
 
 	// realloc to size zero
 	memcpy(memory, mem3, MEMORY_SIZE);
@@ -385,6 +404,7 @@ void mem_manager_test2(void) {
 	data1 = m_realloc(memory + HEADER_SIZE, 0);
 	m_assert(memcmp(mem5, memory, MEMORY_SIZE) == 0);
 	m_assert(totalAllocatedMemory == 7);
+	m_assert(totalNumBlocks == 3);
 
 	// realloc by only 1 so that its forced to claim the extra space and not change size
 	memcpy(memory, mem3, MEMORY_SIZE);
@@ -392,6 +412,8 @@ void mem_manager_test2(void) {
 	data1 = m_realloc(memory + HEADER_SIZE, 0x0c);
 	m_assert(memcmp(mem3, memory, MEMORY_SIZE) == 0);
 	m_assert(totalAllocatedMemory == 0x12);
+	m_assert(totalNumBlocks == 3);
+	memset(memory, 0, MEMORY_SIZE);
 }
 
 #endif

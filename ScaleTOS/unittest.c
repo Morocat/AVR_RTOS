@@ -63,7 +63,7 @@ void test_mem_manager(void) {
 	testsPassed++;
 }
 
-volatile bool threadFunctionCalled;
+Semaphore threadFunctionCalled;
 void test_create_task(void) {
 	Timer timer;
 	Context* c;
@@ -71,8 +71,8 @@ void test_create_task(void) {
 	c = kernel_create_task(_task_test_func1, 0, "Test Task", 256);
 	m_assert(c != NULL);
 	kernel_create_task(_task_test_func3, 1, "Low Priority Task", 256);
-	//kernel_create_task(_task_test_func2, 0, "Test Task 2", 256);
-	while(!threadFunctionCalled);
+	kernel_create_task(_task_test_func2, 0, "Test Task 2", 256);
+	task_wait_on_semaphore(&threadFunctionCalled);
 	timer_set(&timer, 1000);
 	while(!timer_has_expired(&timer));
 	kernel_create_task(_task_test_post_func, 0, "Post Task", 256);
@@ -89,7 +89,7 @@ void _task_test_func1(void) {
 	kernel_create_task(_task_test_func2, 0, "Test Task 2", 256);
 
 	serial_send_string("Somebody once told me the world was gonna roll me");
-	threadFunctionCalled = true;
+	threadFunctionCalled.value++;;
 }
 
 void _task_test_func2(void) {

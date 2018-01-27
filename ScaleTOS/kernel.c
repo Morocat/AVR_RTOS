@@ -44,7 +44,7 @@
 
 	m_assert(priority < MAX_PRIORITY);
 	m_assert(taskName != NULL);
-	m_assert(stackSize > 45); // each task requires 45 bytes of overhead on Atmel xmega chips
+	m_assert(stackSize > 45); // each task requires 45 bytes of overhead on Atmel xmega chips due to the registers
 
 	for (i = 0; i < MAX_PRIORITY; i++) {
 		n = contextList[i].head;
@@ -184,14 +184,16 @@
  }
 
  void kernel_yield_from_task(uint16_t duration) {
-	activeContext->status = BLOCKED;
-	timer_set(&activeContext->timer, duration);
+	if (activeContext != NULL) {
+		activeContext->status = BLOCKED;
+		timer_set(&activeContext->timer, duration);
+	}
 	//TCC0.CNT = TCC0.PER;
 	//tick_trigger_interrupt();
  }
 
  void kernel_check_stack_overflow(void) {
-	if (activeContext->stackPointer < activeContext->stack) {
+	if (activeContext != NULL && activeContext->stackPointer < activeContext->stack) {
 		#if DEBUG_TRACE
 			sprintf(gStrBuf, "Stack overflow detected in task %s!\n\r", activeContext->taskName);
 			serial_send_string(gStrBuf);
@@ -242,4 +244,24 @@
 
  void kernel_no_return(void) {
 	asm volatile ("rjmp .-2 \n\t");
+ }
+
+ void kernel_take_mutex(Mutex *m) {
+	if (!m->inUse) {
+		m->inUse = true;
+		m->owner = activeContext;
+		return;
+	}
+
+	if (m->owner == activeContext)
+		return;
+
+	// boost priority of lower priority task if needed
+	if (activeContext->priority < m->owner->priority) {
+		activeContext->prevPriority = activeContext->priority;
+		activeContext->priority = m->owner->priority;
+		queue_move_item(&contextList[activeContext->priority], &contextList[activeContext->prevPriority], (void*)activeContext);
+		queue_sort(&contextList[activeContext->priority]);
+	}
+
  }

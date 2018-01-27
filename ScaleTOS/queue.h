@@ -28,6 +28,7 @@ void queue_add_with_priority(Queue *queue, void *item, uint16_t priority);
 void* queue_take(Queue *queue);
 void* queue_peek(Queue *queue);
 void queue_remove(Queue *queue, void *data);
+void queue_move_item(Queue *qTo, Queue *qFrom, void *item);
 void queue_sort(Queue *queue);
 QueueNode* queue_find_node(Queue *queue, void* data);
 

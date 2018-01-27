@@ -62,7 +62,6 @@
 
 	 if (queue->size == 0)
 		return;
-	 queue->size--;
 
 	 prev = cur = queue->head;
 	 if (cur->data == data)
@@ -76,9 +75,40 @@
 			return;
 		 prev->next = cur->next;
 	 }
+	 queue->size--;
 	 //memset(cur, 0, sizeof(QueueNode));
 	 free(cur);
  }
+
+void queue_move_item(Queue *qTo, Queue *qFrom, void *item) {
+	QueueNode *prev = NULL, *cur;
+
+	if (qFrom->size == 0)
+		return;
+	
+	prev = cur = qFrom->head;
+	if (cur->data == item)
+		qFrom->head = cur->next;
+	else {
+		while (cur != NULL && cur->data != item) {
+			prev = cur;
+			cur = cur->next;
+		}
+		if (cur == NULL)
+			return;
+		prev->next = cur->next;
+	}
+
+	prev = qTo->head;
+	while(prev->next != NULL)
+		prev = prev->next;
+
+	prev->next = cur;
+	cur->next = NULL;
+
+	qFrom->size--;
+	qTo->size++;
+}
 
 void queue_sort(Queue *queue) {
 	int i, j;

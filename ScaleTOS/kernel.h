@@ -5,11 +5,11 @@
  *  Author: alelop
  */ 
 
-
 #ifndef KERNEL_H_
 #define KERNEL_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "timer.h"
 #include "config.h"
 
@@ -31,9 +31,10 @@ typedef struct Context{
 	uint16_t			*stackPointer;
 	char				*taskName;
 	uint8_t				priority;
+	uint8_t				prevPriority;
 	uint16_t			stackSize;
 	ContextStatus		status;
-	void (*entryPoint)(void);
+	void				(*entryPoint)(void);
 	Timer				timer;
 #if DEBUG_TRACE
 	uint16_t			stackTop;
@@ -43,9 +44,19 @@ typedef struct Context{
 typedef enum SchedulerStatus{
 	STOPPED, RUNNING, SUSPENDED
 }SchedulerStatus;
+
 typedef struct Scheduler{
 	SchedulerStatus status;
 }Scheduler;
+
+typedef struct Semaphore{
+	int value;
+}Semaphore;
+
+typedef struct Mutex{
+	bool inUse;
+	Context *owner;
+}Mutex;
 
 volatile uint16_t *ptrStackP;
 volatile uint16_t defaultStackP;
@@ -57,6 +68,11 @@ void kernel_process_all_tasks(void);
 void kernel_no_return(void);
 void kernel_enable_scheduler(void);
 void kernel_disable_scheduler(void);
+
+#define task_wait_on_semaphore(_semaphore) while ((_semaphore)->value == 0) { \
+												TASK_YIELD();				  \
+											}								  \
+
 
 #define TASK_YIELD_DEFAULT() kernel_yield_from_task(DEFAULT_BLOCK_DURATION)
 #define TASK_YIELD_DURATION(_duration) kernel_yield_from_task((uint16_t)_duration)
